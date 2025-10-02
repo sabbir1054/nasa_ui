@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import Navbar from "../Component/Navbar";
 
 const Training = () => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [searchParams] = useSearchParams();
   const jobId = searchParams.get("jobId");
@@ -264,10 +265,10 @@ const Training = () => {
             {/* Back Button */}
             <div className="mt-8 flex justify-center">
               <button
-                onClick={() => (window.location.href = "/merge")}
+                onClick={() => navigate(-1)}
                 className="px-6 py-2 bg-[#151b2a] border border-gray-700 text-white rounded-lg hover:bg-[#1a2132] transition-colors"
               >
-                ← Back to Merge
+                ← Back
               </button>
             </div>
           </div>

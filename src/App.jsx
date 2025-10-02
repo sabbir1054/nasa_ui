@@ -4,6 +4,7 @@ import About from './pages/About'
 import Upload from './pages/Upload'
 import Merge from './pages/Merge'
 import Training from './pages/Training'
+import ManualTraining from './pages/ManualTraining'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/upload" element={<Upload />} />
         <Route path="/merge" element={<Merge />} />
         <Route path="/training" element={<Training />} />
+        <Route path="/manual-training" element={<ManualTraining />} />
       </Routes>
     </BrowserRouter>
   )

@@ -1,5 +1,4 @@
-After click start Training Button it hit 
-this endpoint 
+
 http://203.190.12.138:8002/api/train
 file : selected merged csv file
  
