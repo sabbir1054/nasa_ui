@@ -93,7 +93,7 @@ const Upload = () => {
         {/* Main Content */}
         <div className="max-w-7xl mx-auto px-6 pt-40 pb-16">
           {/* Main Card Container */}
-          <div className="bg-[#0a0f1a] border border-gray-800 rounded-lg p-6 md:p-8">
+          <div className="bg-[#0a0f1a] border border-gray-800 rounded-lg p-6 md:p-8 mb-6">
             <UploadHeader
               satellite={satellite}
               setSatellite={setSatellite}
@@ -131,10 +131,10 @@ const Upload = () => {
                 />
               </div>
             </div>
-
-            {/* Prediction Results Table */}
-            <PredictionResults results={results} downloadUrl={downloadUrl} />
           </div>
+
+          {/* Prediction Results Table - Separate Card */}
+          <PredictionResults results={results} downloadUrl={downloadUrl} />
         </div>
       </div>
 

@@ -1,9 +1,22 @@
 const DataSummary = ({ onPredict, onReset, loading, results }) => {
   // Calculate stats from results
   const totalPredicted = results?.length || 0;
-  const confirmed = results?.filter(r => r.Predicted_Class === 'CONFIRMED').length || 0;
-  const candidate = results?.filter(r => r.Predicted_Class === 'CANDIDATE').length || 0;
-  const falsePositive = results?.filter(r => r.Predicted_Class === 'FALSE POSITIVE').length || 0;
+
+  // Initialize all classes with 0, then count actual results
+  const classDistribution = {
+    'CONFIRMED': 0,
+    'CANDIDATE': 0,
+    'FALSE POSITIVE': 0
+  };
+
+  if (results && results.length > 0) {
+    results.forEach(r => {
+      const predictedClass = r.Predicted_Class;
+      if (predictedClass) {
+        classDistribution[predictedClass] = (classDistribution[predictedClass] || 0) + 1;
+      }
+    });
+  }
 
   return (
     <div className="space-y-5">
@@ -23,38 +36,21 @@ const DataSummary = ({ onPredict, onReset, loading, results }) => {
         </div>
       </div>
 
-      {/* Class Distribution Section */}
+      {/* Class Distribution Section - Always show when results exist */}
       {results && results.length > 0 && (
         <div className="bg-[#0a0f1a] border border-gray-800 rounded-lg p-5 animate-slide-in-up" style={{ animationDelay: '0.3s' }}>
           <h3 className="text-white text-base font-medium mb-4">Class Distribution</h3>
 
           <div className="space-y-3">
-            {/* Confirmed */}
-            <div className="flex items-center justify-between p-3 bg-[#151b2a] rounded-md hover:bg-[#1a2132] transition-colors">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-sm"></div>
-                <span className="text-white text-sm">Confirmed</span>
+            {Object.entries(classDistribution).map(([className, count]) => (
+              <div key={className} className="flex items-center justify-between p-3 bg-[#151b2a] rounded-md hover:bg-[#1a2132] transition-colors">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-sm"></div>
+                  <span className="text-white text-sm">{className}</span>
+                </div>
+                <span className="text-blue-400 text-sm font-medium">{count}</span>
               </div>
-              <span className="text-blue-400 text-sm font-medium">{confirmed}</span>
-            </div>
-
-            {/* Candidate */}
-            <div className="flex items-center justify-between p-3 bg-[#151b2a] rounded-md hover:bg-[#1a2132] transition-colors">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-sm"></div>
-                <span className="text-white text-sm">Candidate</span>
-              </div>
-              <span className="text-blue-400 text-sm font-medium">{candidate}</span>
-            </div>
-
-            {/* False Positive */}
-            <div className="flex items-center justify-between p-3 bg-[#151b2a] rounded-md hover:bg-[#1a2132] transition-colors">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-sm"></div>
-                <span className="text-white text-sm">False Positive</span>
-              </div>
-              <span className="text-blue-400 text-sm font-medium">{falsePositive}</span>
-            </div>
+            ))}
           </div>
         </div>
       )}
