@@ -1,10 +1,12 @@
-import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
-import LoadingSpinner from '../LoadingSpinner';
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import LoadingSpinner from "../LoadingSpinner";
+import Popup from "../Popup";
 
 const MergeResults = forwardRef(({ onUseCsv }, ref) => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+  const [popup, setPopup] = useState(null);
 
   useEffect(() => {
     fetchMergedFiles();
@@ -12,24 +14,36 @@ const MergeResults = forwardRef(({ onUseCsv }, ref) => {
 
   // Expose fetchMergedFiles to parent via ref
   useImperativeHandle(ref, () => ({
-    refresh: fetchMergedFiles
+    refresh: fetchMergedFiles,
   }));
 
   const fetchMergedFiles = async () => {
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const response = await fetch('http://203.190.12.138:8001/api/merge');
+      const response = await fetch("http://203.190.12.138:8002/api/merge");
       const data = await response.json();
 
       if (data.ok) {
         setFiles(data.files || []);
       } else {
-        setError('Failed to fetch merged files');
+        const errorMsg = "Failed to fetch merged files";
+        setError(errorMsg);
+        setPopup({
+          type: "error",
+          title: "Load Failed",
+          message: data.message || "Unable to retrieve the list of merged CSV files from the server. Please try refreshing.",
+        });
       }
     } catch (err) {
-      setError('Failed to connect to the server');
+      const errorMsg = "Failed to connect to the server";
+      setError(errorMsg);
+      setPopup({
+        type: "error",
+        title: "Connection Error",
+        message: "Unable to connect to the server. Please check your internet connection and ensure the server is running.",
+      });
       console.error(err);
     } finally {
       setLoading(false);
@@ -37,23 +51,23 @@ const MergeResults = forwardRef(({ onUseCsv }, ref) => {
   };
 
   const formatFileSize = (bytes) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
   };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleString('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
     });
   };
 
@@ -64,7 +78,19 @@ const MergeResults = forwardRef(({ onUseCsv }, ref) => {
   };
 
   return (
-    <div className="bg-[#0a0f1a] border border-gray-800 rounded-lg p-5 animate-slide-in-up" style={{ animationDelay: '0.4s' }}>
+    <>
+      {popup && (
+        <Popup
+          type={popup.type}
+          title={popup.title}
+          message={popup.message}
+          onClose={() => setPopup(null)}
+        />
+      )}
+      <div
+        className="bg-[#0a0f1a] border border-gray-800 rounded-lg p-5 animate-slide-in-up"
+        style={{ animationDelay: "0.4s" }}
+      >
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-white text-base font-medium">
           Existing Merged CSVs
@@ -74,7 +100,7 @@ const MergeResults = forwardRef(({ onUseCsv }, ref) => {
           disabled={loading}
           className="text-gray-400 hover:text-white text-xs transition-colors"
         >
-          {loading ? 'Loading...' : '↻ Refresh'}
+          {loading ? "Loading..." : "↻ Refresh"}
         </button>
       </div>
 
@@ -89,11 +115,21 @@ const MergeResults = forwardRef(({ onUseCsv }, ref) => {
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-800">
-              <th className="text-left text-gray-400 text-xs font-medium pb-3">Name</th>
-              <th className="text-left text-gray-400 text-xs font-medium pb-3">Rows</th>
-              <th className="text-left text-gray-400 text-xs font-medium pb-3">Size</th>
-              <th className="text-left text-gray-400 text-xs font-medium pb-3">Modified</th>
-              <th className="text-left text-gray-400 text-xs font-medium pb-3">Actions</th>
+              <th className="text-left text-gray-400 text-xs font-medium pb-3">
+                Name
+              </th>
+              <th className="text-left text-gray-400 text-xs font-medium pb-3">
+                Rows
+              </th>
+              <th className="text-left text-gray-400 text-xs font-medium pb-3">
+                Size
+              </th>
+              <th className="text-left text-gray-400 text-xs font-medium pb-3">
+                Modified
+              </th>
+              <th className="text-left text-gray-400 text-xs font-medium pb-3">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -105,7 +141,10 @@ const MergeResults = forwardRef(({ onUseCsv }, ref) => {
               </tr>
             ) : files.length === 0 ? (
               <tr>
-                <td colSpan="5" className="py-8 text-center text-gray-400 text-sm">
+                <td
+                  colSpan="5"
+                  className="py-8 text-center text-gray-400 text-sm"
+                >
                   No merged files available
                 </td>
               </tr>
@@ -116,11 +155,17 @@ const MergeResults = forwardRef(({ onUseCsv }, ref) => {
                   className="border-b border-gray-800 hover:bg-[#151b2a] transition-colors"
                 >
                   <td className="py-3 text-white text-sm" title={file.filename}>
-                    {file.filename.length > 50 ? file.filename.substring(0, 50) + '...' : file.filename}
+                    {file.filename.length > 50
+                      ? file.filename.substring(0, 50) + "..."
+                      : file.filename}
                   </td>
                   <td className="py-3 text-gray-400 text-sm">{file.rows}</td>
-                  <td className="py-3 text-gray-400 text-sm">{formatFileSize(file.size_bytes)}</td>
-                  <td className="py-3 text-gray-400 text-sm">{formatDate(file.modified)}</td>
+                  <td className="py-3 text-gray-400 text-sm">
+                    {formatFileSize(file.size_bytes)}
+                  </td>
+                  <td className="py-3 text-gray-400 text-sm">
+                    {formatDate(file.modified)}
+                  </td>
                   <td className="py-3">
                     <button
                       onClick={() => handleUse(file)}
@@ -135,10 +180,11 @@ const MergeResults = forwardRef(({ onUseCsv }, ref) => {
           </tbody>
         </table>
       </div>
-    </div>
+      </div>
+    </>
   );
 });
 
-MergeResults.displayName = 'MergeResults';
+MergeResults.displayName = "MergeResults";
 
 export default MergeResults;

@@ -1,80 +1,65 @@
+After click start Training Button it hit 
+this endpoint 
+http://203.190.12.138:8002/api/train
+file : selected merged csv file
+ 
+response:
 
-Get 
-http://203.190.12.138:8001/api/merge
-
-response is given below:
 {
     "ok": true,
-    "count": 4,
-    "files": [
-        {
-            "filename": "merged_fast_100_rowsfast_100_rowspred_k2_svm_20251002-222605_20251002-191150.csv",
-            "url": "http://203.190.12.138:8001/media/mergefiles/merged_fast_100_rowsfast_100_rowspred_k2_svm_20251002-222605_20251002-191150.csv",
-            "rows": 100,
-            "size_bytes": 83190,
-            "modified": "2025-10-02T19:11:50.176323",
-            "merge_token": "{\"rel\": \"mergefiles/merged_fast_100_rowsfast_100_rowspred_k2_svm_20251002-222605_20251002-191150.csv\"}:1v4Ojk:fyOGh0jjUDFjUDHelJwmhrJilg-P2VlfQUgw_y1VjIc",
-            "rel_path": "mergefiles/merged_fast_100_rowsfast_100_rowspred_k2_svm_20251002-222605_20251002-191150.csv"
-        },
-        {
-            "filename": "merged_koi_train-2koi_test_rawpred_koi_20250928-171133-1_20251002-190338.csv",
-            "url": "http://203.190.12.138:8001/media/mergefiles/merged_koi_train-2koi_test_rawpred_koi_20250928-171133-1_20251002-190338.csv",
-            "rows": 9564,
-            "size_bytes": 3050747,
-            "modified": "2025-10-02T19:03:38.800917",
-            "merge_token": "{\"rel\": \"mergefiles/merged_koi_train-2koi_test_rawpred_koi_20250928-171133-1_20251002-190338.csv\"}:1v4Ojk:ByB4QV3PQazf7yp3_UdXk4xnJ7GUXg1ANamibrnUC6Q",
-            "rel_path": "mergefiles/merged_koi_train-2koi_test_rawpred_koi_20250928-171133-1_20251002-190338.csv"
-        },
+    "message": "Training started",
+    "job_id": "75c67d1e-ba8b-4d61-ae3b-1b9b822a518c",
+    "status": "PENDING",
+    "status_url": "http://203.190.12.138:8002/api/train/75c67d1e-ba8b-4d61-ae3b-1b9b822a518c/status",
+    "logs_url": "http://203.190.12.138:8002/api/train/75c67d1e-ba8b-4d61-ae3b-1b9b822a518c/logs",
+    "info": "Uploaded: koi_train.csv"
+}
 
-    ]
+then it redirect to another page called training
+
+there api continuous hit "status_url" when it get success message then it show
+
+response:
+{
+    "ok": true,
+    "job_id": "a5228547-b27f-4844-9ea6-70c8b0358b5c",
+    "status": "SUCCEEDED",
+    "params": {
+        "data_path": "/home/swe/RayhanDSLab/code/HuntingNew/Hunting_For_Exoplanets_With_AI_Nasa2025/server/media/uploads/koi_train.csv",
+        "satellite": "KOI",
+        "model": "xgb"
+    },
+    "result": {
+        "accuracy": 0.9297411516111992,
+        "cv_mean": 0.9078576462297393,
+        "cv_std": 0.034727496499455404,
+        "auc_score": 0.984793165817035,
+        "cm_image_path": "/home/swe/RayhanDSLab/code/HuntingNew/Hunting_For_Exoplanets_With_AI_Nasa2025/server/media/plots/cm_KOI_xgb_20251002-202836.png",
+        "cm_image_url": "/media/plots/cm_KOI_xgb_20251002-202836.png",
+        "cm_norm_image_path": "/home/swe/RayhanDSLab/code/HuntingNew/Hunting_For_Exoplanets_With_AI_Nasa2025/server/media/plots/cm_KOI_xgb_20251002-202836_normalized.png",
+        "cm_norm_image_url": "/media/plots/cm_KOI_xgb_20251002-202836_normalized.png",
+        "model_path": "/home/swe/RayhanDSLab/code/HuntingNew/Hunting_For_Exoplanets_With_AI_Nasa2025/server/media/models/KOI_model_xgb.joblib",
+        "model_url": "/media/models/KOI_model_xgb.joblib",
+        "elapsed_sec": 13.675935745239258
+    },
+    "error": null
 
 }
 
+That send request in every 2sec to get response till status not Success other wise it show Running in a capsule
 
+there contain also a progress bar and time count down until it get Success message .
 
-```
- const handleMerge = async (e) => {
-    e.preventDefault();
-    if (!mergeForm.file_a || !mergeForm.file_b) {
-      setMessages(prev => ({ ...prev, merge: 'Please select both files' }));
-      return;
-    }
+So according to my full project , this page also contain previous style and background photo would be aa.png and color combination 100% align with my project . So this information with a nice and simple animated way. that is given below
 
-    setLoading(true);
-    setMessages(prev => ({ ...prev, merge: 'Merging...' }));
+Status
 
-    try {
-      const result = await apiService.mergeFiles(
-        mergeForm.file_a,
-        mergeForm.file_b,
-        {
-          dedupe: mergeForm.dedupe === 'true',
-          output_name: mergeForm.output_name || undefined
-        }
-      );
+Satelite
+model
 
-      // Select the newly merged file
-      setSelectedFile({
-        url: result.merged_url,
-        filename: result.merged_filename,
-        rows: result.merged_rows,
-        token: result.merge_token
-      });
-
-      setMessages(prev => ({ 
-        ...prev, 
-        merge: `Merged: ${result.merged_filename}` 
-      }));
-
-      // Refresh the list
-      fetchExisting();
-    } catch (error) {
-      setMessages(prev => ({ 
-        ...prev, 
-        merge: `Merge failed: ${error.message}` 
-      }));
-    } finally {
-      setLoading(false);
-    }
-  };
-```
+accuracy
+cv_means
+cv_sta
+auc_score
+cm_norm_image_path
+elapsed_sec
