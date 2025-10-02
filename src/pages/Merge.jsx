@@ -1,8 +1,18 @@
+import { useRef } from 'react';
 import Navbar from '../Component/Navbar';
 import MergeForm from '../Component/Merge/MergeForm';
 import MergeResults from '../Component/Merge/MergeResults';
 
 const Merge = () => {
+  const mergeResultsRef = useRef();
+
+  const handleMergeSuccess = () => {
+    // Refresh the merge results list after successful merge
+    if (mergeResultsRef.current) {
+      mergeResultsRef.current.refresh();
+    }
+  };
+
   return (
     <div className="relative min-h-screen w-full bg-black">
       {/* Background Image */}
@@ -36,12 +46,12 @@ const Merge = () => {
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
               {/* Left Column - Merge Form (2 columns) */}
               <div className="lg:col-span-2">
-                <MergeForm />
+                <MergeForm onMergeSuccess={handleMergeSuccess} />
               </div>
 
               {/* Right Column - Results Table (3 columns) */}
               <div className="lg:col-span-3">
-                <MergeResults />
+                <MergeResults ref={mergeResultsRef} />
               </div>
             </div>
           </div>

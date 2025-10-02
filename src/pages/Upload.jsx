@@ -4,6 +4,7 @@ import DataSummary from "../Component/Upload/DataSummary";
 import FileUploadCard from "../Component/Upload/FileUploadCard";
 import UploadHeader from "../Component/Upload/UploadHeader";
 import PredictionResults from "../Component/Upload/PredictionResults";
+import LoadingSpinner from "../Component/LoadingSpinner";
 
 const Upload = () => {
   const [satellite, setSatellite] = useState('KOI');
@@ -70,8 +71,11 @@ const Upload = () => {
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-black">
-      {/* Background Image */}
+    <>
+      {loading && <LoadingSpinner message="Predicting..." overlay={true} />}
+
+      <div className="relative min-h-screen w-full bg-black">
+        {/* Background Image */}
       <div
         className="fixed inset-0 w-full h-full"
         style={{
@@ -170,7 +174,8 @@ const Upload = () => {
           animation-fill-mode: forwards;
         }
       `}</style>
-    </div>
+      </div>
+    </>
   );
 };
 

@@ -1,54 +1,80 @@
-Here at first need to select Satelite the select model then enter range which is option then upload the data csv then click Predict button
-model drop down select options contain this
-xgb as XGB BOOST
-gb as Gradient Boosting
-rf as Random Forest
-dt as Decision Tree
-svm as SVM
-lr as Logistic Regression
 
-here request url :
-BACKEND_API_LINK: http://203.190.12.138:8002
+Get 
+http://203.190.12.138:8001/api/merge
 
-
-URL: api/predict
-
-Response: after prediction user also can download the CSV
-
+response is given below:
 {
     "ok": true,
-    "satellite": "KOI",
-    "from_row": 0,
-    "to_row": 1,
-    "total_predicted": 2,
-    "csv_file": "http://127.0.0.1:8000/media/uploads/koi_test_raw__pred_KOI_20250930-014418.csv",
-    "results": [
+    "count": 4,
+    "files": [
         {
-            "Row_Number": 0,
-            "KEP_ID": 9777089,
-            "KOI_Name": "K07962.01",
-            "Kepler_Name": null,
-            "Actual_Class": "FALSE POSITIVE",
-            "Predicted_Class": "FALSE POSITIVE",
-            "Confidence": 0.9954034090042114,
-            "Match": "Yes",
-            "Prob_CANDIDATE": 0.003210674272850156,
-            "Prob_CONFIRMED": 0.0013858899474143982,
-            "Prob_FALSE POSITIVE": 0.9954034090042114
+            "filename": "merged_fast_100_rowsfast_100_rowspred_k2_svm_20251002-222605_20251002-191150.csv",
+            "url": "http://203.190.12.138:8001/media/mergefiles/merged_fast_100_rowsfast_100_rowspred_k2_svm_20251002-222605_20251002-191150.csv",
+            "rows": 100,
+            "size_bytes": 83190,
+            "modified": "2025-10-02T19:11:50.176323",
+            "merge_token": "{\"rel\": \"mergefiles/merged_fast_100_rowsfast_100_rowspred_k2_svm_20251002-222605_20251002-191150.csv\"}:1v4Ojk:fyOGh0jjUDFjUDHelJwmhrJilg-P2VlfQUgw_y1VjIc",
+            "rel_path": "mergefiles/merged_fast_100_rowsfast_100_rowspred_k2_svm_20251002-222605_20251002-191150.csv"
         },
         {
-            "Row_Number": 1,
-            "KEP_ID": 11918793,
-            "KOI_Name": "K08069.01",
-            "Kepler_Name": null,
-            "Actual_Class": "FALSE POSITIVE",
-            "Predicted_Class": "FALSE POSITIVE",
-            "Confidence": 0.9952402114868164,
-            "Match": "Yes",
-            "Prob_CANDIDATE": 0.003774491371586919,
-            "Prob_CONFIRMED": 0.0009853403316810727,
-            "Prob_FALSE POSITIVE": 0.9952402114868164
-        }
+            "filename": "merged_koi_train-2koi_test_rawpred_koi_20250928-171133-1_20251002-190338.csv",
+            "url": "http://203.190.12.138:8001/media/mergefiles/merged_koi_train-2koi_test_rawpred_koi_20250928-171133-1_20251002-190338.csv",
+            "rows": 9564,
+            "size_bytes": 3050747,
+            "modified": "2025-10-02T19:03:38.800917",
+            "merge_token": "{\"rel\": \"mergefiles/merged_koi_train-2koi_test_rawpred_koi_20250928-171133-1_20251002-190338.csv\"}:1v4Ojk:ByB4QV3PQazf7yp3_UdXk4xnJ7GUXg1ANamibrnUC6Q",
+            "rel_path": "mergefiles/merged_koi_train-2koi_test_rawpred_koi_20250928-171133-1_20251002-190338.csv"
+        },
+
     ]
+
 }
 
+
+
+```
+ const handleMerge = async (e) => {
+    e.preventDefault();
+    if (!mergeForm.file_a || !mergeForm.file_b) {
+      setMessages(prev => ({ ...prev, merge: 'Please select both files' }));
+      return;
+    }
+
+    setLoading(true);
+    setMessages(prev => ({ ...prev, merge: 'Merging...' }));
+
+    try {
+      const result = await apiService.mergeFiles(
+        mergeForm.file_a,
+        mergeForm.file_b,
+        {
+          dedupe: mergeForm.dedupe === 'true',
+          output_name: mergeForm.output_name || undefined
+        }
+      );
+
+      // Select the newly merged file
+      setSelectedFile({
+        url: result.merged_url,
+        filename: result.merged_filename,
+        rows: result.merged_rows,
+        token: result.merge_token
+      });
+
+      setMessages(prev => ({ 
+        ...prev, 
+        merge: `Merged: ${result.merged_filename}` 
+      }));
+
+      // Refresh the list
+      fetchExisting();
+    } catch (error) {
+      setMessages(prev => ({ 
+        ...prev, 
+        merge: `Merge failed: ${error.message}` 
+      }));
+    } finally {
+      setLoading(false);
+    }
+  };
+```

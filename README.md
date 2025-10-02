@@ -117,4 +117,3 @@ After click merger, the file name will appear in left side, if click use then th
 
 
 If click train, the process same for training you did in before
-
