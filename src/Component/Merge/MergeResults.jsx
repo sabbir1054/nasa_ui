@@ -1,7 +1,7 @@
 import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import LoadingSpinner from '../LoadingSpinner';
 
-const MergeResults = forwardRef((props, ref) => {
+const MergeResults = forwardRef(({ onUseCsv }, ref) => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -58,7 +58,9 @@ const MergeResults = forwardRef((props, ref) => {
   };
 
   const handleUse = (file) => {
-    window.open(file.url, '_blank');
+    if (onUseCsv) {
+      onUseCsv(file);
+    }
   };
 
   return (

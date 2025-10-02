@@ -1,10 +1,13 @@
-import { useRef } from 'react';
-import Navbar from '../Component/Navbar';
-import MergeForm from '../Component/Merge/MergeForm';
-import MergeResults from '../Component/Merge/MergeResults';
+import { useRef, useState, useEffect } from "react";
+import CsvViewer from "../Component/Merge/CsvViewer";
+import MergeForm from "../Component/Merge/MergeForm";
+import MergeResults from "../Component/Merge/MergeResults";
+import Navbar from "../Component/Navbar";
 
 const Merge = () => {
   const mergeResultsRef = useRef();
+  const csvViewerRef = useRef();
+  const [selectedCsv, setSelectedCsv] = useState(null);
 
   const handleMergeSuccess = () => {
     // Refresh the merge results list after successful merge
@@ -13,17 +16,40 @@ const Merge = () => {
     }
   };
 
+  const handleUseCsv = (file) => {
+    setSelectedCsv({
+      url: file.url,
+      filename: file.filename,
+    });
+  };
+
+  const handleCloseCsv = () => {
+    setSelectedCsv(null);
+  };
+
+  // Smooth scroll to CSV viewer when it appears
+  useEffect(() => {
+    if (selectedCsv && csvViewerRef.current) {
+      setTimeout(() => {
+        csvViewerRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }, 100);
+    }
+  }, [selectedCsv]);
+
   return (
     <div className="relative min-h-screen w-full bg-black">
       {/* Background Image */}
       <div
         className="fixed inset-0 w-full h-full"
         style={{
-          backgroundImage: 'url(/aa.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          zIndex: 0
+          backgroundImage: "url(/aa.png)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          zIndex: 0,
         }}
       >
         <div className="absolute inset-0 bg-black/50"></div>
@@ -51,10 +77,22 @@ const Merge = () => {
 
               {/* Right Column - Results Table (3 columns) */}
               <div className="lg:col-span-3">
-                <MergeResults ref={mergeResultsRef} />
+                <MergeResults ref={mergeResultsRef} onUseCsv={handleUseCsv} />
               </div>
             </div>
           </div>
+        </div>
+        <div className="max-w-9xl mx-auto px-6 pb-16">
+          {/* CSV Viewer - Appears below merge card when a file is selected */}
+          {selectedCsv && (
+            <div ref={csvViewerRef} className="mt-6">
+              <CsvViewer
+                csvUrl={selectedCsv.url}
+                filename={selectedCsv.filename}
+                onClose={handleCloseCsv}
+              />
+            </div>
+          )}
         </div>
       </div>
 
