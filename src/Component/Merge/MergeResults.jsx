@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import LoadingSpinner from "../LoadingSpinner";
 import Popup from "../Popup";
+import { getApiUrl } from "../../config/api";
 
 const MergeResults = forwardRef(({ onUseCsv }, ref) => {
   const [files, setFiles] = useState([]);
@@ -22,7 +23,7 @@ const MergeResults = forwardRef(({ onUseCsv }, ref) => {
     setError("");
 
     try {
-      const response = await fetch("http://203.190.12.138:8002/api/merge");
+      const response = await fetch(getApiUrl("/api/merge"));
       const data = await response.json();
 
       if (data.ok) {

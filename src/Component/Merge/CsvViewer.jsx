@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import LoadingSpinner from "../LoadingSpinner";
 import Popup from "../Popup";
+import { getApiUrl } from "../../config/api";
 
 const CsvViewer = ({ csvUrl, filename, onClose }) => {
   const [csvData, setCsvData] = useState([]);
@@ -92,7 +93,7 @@ const CsvViewer = ({ csvUrl, filename, onClose }) => {
       formData.append('model', model);
 
       // Send training request
-      const response = await fetch('http://203.190.12.138:8002/api/train', {
+      const response = await fetch(getApiUrl('/api/train'), {
         method: 'POST',
         body: formData,
       });

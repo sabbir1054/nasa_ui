@@ -5,6 +5,7 @@ import FileUploadCard from "../Component/Upload/FileUploadCard";
 import UploadHeader from "../Component/Upload/UploadHeader";
 import PredictionResults from "../Component/Upload/PredictionResults";
 import LoadingSpinner from "../Component/LoadingSpinner";
+import { getApiUrl } from "../config/api";
 
 const Upload = () => {
   const [satellite, setSatellite] = useState('KOI');
@@ -38,7 +39,7 @@ const Upload = () => {
     if (toRow) formData.append('to_row', toRow);
 
     try {
-      const response = await fetch('http://203.190.12.138:8002/api/predict', {
+      const response = await fetch(getApiUrl('/api/predict'), {
         method: 'POST',
         body: formData,
       });

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../Component/Navbar";
 import LoadingSpinner from "../Component/LoadingSpinner";
 import Popup from "../Component/Popup";
+import { getApiUrl } from "../config/api";
 
 const ManualTraining = () => {
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ const ManualTraining = () => {
     formData.append("model", model);
 
     try {
-      const response = await fetch("http://203.190.12.138:8002/api/train", {
+      const response = await fetch(getApiUrl("/api/train"), {
         method: "POST",
         body: formData,
       });

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Navbar from "../Component/Navbar";
+import { getMediaUrl } from "../config/api";
 
 const Training = () => {
   const navigate = useNavigate();
@@ -236,7 +237,7 @@ const Training = () => {
                     </h4>
                     <div className="flex justify-center">
                       <img
-                        src={`http://203.190.12.138:8002${result.cm_norm_image_url}`}
+                        src={getMediaUrl(result.cm_norm_image_url)}
                         alt="Confusion Matrix"
                         className="max-w-full h-auto rounded-lg border border-gray-700"
                       />
@@ -248,7 +249,7 @@ const Training = () => {
                 {/* {result.model_url && (
                   <div className="flex justify-center">
                     <a
-                      href={`http://203.190.12.138:8002${result.model_url}`}
+                      href={getMediaUrl(result.model_url)}
                       download
                       className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all duration-300 inline-flex items-center gap-2"
                     >

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import LoadingSpinner from "../LoadingSpinner";
 import Popup from "../Popup";
+import { getApiUrl } from "../../config/api";
 
 const MergeForm = ({ onMergeSuccess }) => {
   const [fileA, setFileA] = useState(null);
@@ -69,7 +70,7 @@ const MergeForm = ({ onMergeSuccess }) => {
     formData.append("output_name", defaultFilename);
 
     try {
-      const response = await fetch("http://203.190.12.138:8002/api/merge", {
+      const response = await fetch(getApiUrl("/api/merge"), {
         method: "POST",
         body: formData,
       });
