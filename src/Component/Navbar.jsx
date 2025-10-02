@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const Navbar = () => {
   return (
     <nav className="absolute top-0 left-0 right-0 z-50 px-8 py-6">
@@ -9,18 +11,21 @@ const Navbar = () => {
 
         {/* Navigation Menu */}
         <div className="flex items-center gap-8 text-white text-sm">
-          <a href="#home" className="hover:text-blue-400 transition">
+          <Link to="/" className="hover:text-blue-400 transition">
             Home
-          </a>
-          <a href="#features" className="hover:text-blue-400 transition">
-            Features
-          </a>
+          </Link>
+          <Link to="/upload" className="hover:text-blue-400 transition">
+            Prediction
+          </Link>
+          <Link to="/merge" className="hover:text-blue-400 transition">
+            Merge
+          </Link>
           <a href="#contact" className="hover:text-blue-400 transition">
             Contact
           </a>
-          <a href="#about" className="hover:text-blue-400 transition">
+          <Link to="/about" className="hover:text-blue-400 transition">
             About
-          </a>
+          </Link>
           <a href="#community" className="hover:text-blue-400 transition">
             Community
           </a>

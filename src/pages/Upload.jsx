@@ -1,9 +1,74 @@
+import { useState } from "react";
 import Navbar from "../Component/Navbar";
 import DataSummary from "../Component/Upload/DataSummary";
 import FileUploadCard from "../Component/Upload/FileUploadCard";
 import UploadHeader from "../Component/Upload/UploadHeader";
+import PredictionResults from "../Component/Upload/PredictionResults";
 
 const Upload = () => {
+  const [satellite, setSatellite] = useState('KOI');
+  const [model, setModel] = useState('');
+  const [fromRow, setFromRow] = useState('');
+  const [toRow, setToRow] = useState('');
+  const [file, setFile] = useState(null);
+  const [results, setResults] = useState(null);
+  const [downloadUrl, setDownloadUrl] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handlePredict = async () => {
+    if (!file) {
+      setError('Please upload a file');
+      return;
+    }
+    if (!model) {
+      setError('Please select a model');
+      return;
+    }
+
+    setError('');
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('satellite', satellite);
+    formData.append('model', model);
+    if (fromRow) formData.append('from_row', fromRow);
+    if (toRow) formData.append('to_row', toRow);
+
+    try {
+      const response = await fetch('http://203.190.12.138:8002/api/predict', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.ok) {
+        setResults(data.results);
+        setDownloadUrl(data.csv_file);
+      } else {
+        setError('Prediction failed. Please try again.');
+      }
+    } catch (err) {
+      setError('Failed to connect to the server. Please try again.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleReset = () => {
+    setSatellite('KOI');
+    setModel('');
+    setFromRow('');
+    setToRow('');
+    setFile(null);
+    setResults(null);
+    setDownloadUrl('');
+    setError('');
+  };
+
   return (
     <div className="relative min-h-screen w-full bg-black">
       {/* Background Image */}
@@ -29,20 +94,46 @@ const Upload = () => {
         <div className="max-w-7xl mx-auto px-6 pt-40 pb-16">
           {/* Main Card Container */}
           <div className="bg-[#0a0f1a] border border-gray-800 rounded-lg p-6 md:p-8">
-            <UploadHeader />
+            <UploadHeader
+              satellite={satellite}
+              setSatellite={setSatellite}
+              model={model}
+              setModel={setModel}
+            />
+
+            {error && (
+              <div className="mb-4 bg-red-500/10 border border-red-500 text-red-400 px-4 py-3 rounded-md text-sm">
+                {error}
+              </div>
+            )}
 
             {/* Two Column Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
               {/* Left Column - File Upload (3 columns) */}
               <div className="lg:col-span-3">
-                <FileUploadCard />
+                <FileUploadCard
+                  fromRow={fromRow}
+                  setFromRow={setFromRow}
+                  toRow={toRow}
+                  setToRow={setToRow}
+                  file={file}
+                  setFile={setFile}
+                />
               </div>
 
               {/* Right Column - Data Summary (2 columns) */}
               <div className="lg:col-span-2">
-                <DataSummary />
+                <DataSummary
+                  onPredict={handlePredict}
+                  onReset={handleReset}
+                  loading={loading}
+                  results={results}
+                />
               </div>
             </div>
+
+            {/* Prediction Results Table */}
+            <PredictionResults results={results} downloadUrl={downloadUrl} />
           </div>
         </div>
       </div>

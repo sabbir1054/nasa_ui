@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const FileUploadCard = () => {
+const FileUploadCard = ({ fromRow, setFromRow, toRow, setToRow, file, setFile }) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDragOver = (e) => {
@@ -15,7 +15,17 @@ const FileUploadCard = () => {
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
-    // Handle file drop logic here
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile) {
+      setFile(droppedFile);
+    }
+  };
+
+  const handleFileSelect = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+    }
   };
 
   return (
@@ -29,16 +39,20 @@ const FileUploadCard = () => {
           <div>
             <label className="text-gray-400 text-xs mb-2 block">From Row</label>
             <input
-              type="text"
+              type="number"
               placeholder="e.g 0"
+              value={fromRow}
+              onChange={(e) => setFromRow(e.target.value)}
               className="w-full bg-[#151b2a] border border-gray-700 rounded-md px-3 py-2 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
             />
           </div>
           <div>
             <label className="text-gray-400 text-xs mb-2 block">To Row</label>
             <input
-              type="text"
+              type="number"
               placeholder="e.g 99"
+              value={toRow}
+              onChange={(e) => setToRow(e.target.value)}
               className="w-full bg-[#151b2a] border border-gray-700 rounded-md px-3 py-2 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
             />
           </div>
@@ -79,11 +93,19 @@ const FileUploadCard = () => {
               </div>
             </div>
 
-            <p className="text-gray-400 text-sm mb-3">Drag CVS or FITS file Here</p>
+            <p className="text-gray-400 text-sm mb-3">
+              {file ? file.name : 'Drag CVS or FITS file Here'}
+            </p>
 
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md text-sm font-medium transition-all duration-300">
+            <label className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md text-sm font-medium transition-all duration-300 cursor-pointer inline-block">
               Browse Files
-            </button>
+              <input
+                type="file"
+                accept=".csv,.fits"
+                onChange={handleFileSelect}
+                className="hidden"
+              />
+            </label>
           </div>
         </div>
       </div>

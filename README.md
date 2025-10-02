@@ -1,5 +1,3 @@
-For next section you for background image use section2bg_.png, left top corner image us tss.png and right bottom corner use kepler.png. implement exactly same ui not change anywhere , add some nice animation 
-
 
 BACKEND API LINK: http://203.190.12.138:8001
 
