@@ -165,7 +165,7 @@ const ManualTraining = () => {
                     Select Satellite
                   </h3>
                   <div className="flex gap-4">
-                    {["KOI", "K2", "TCE"].map((sat) => (
+                    {["KOI", "K2", "TESS"].map((sat) => (
                       <button
                         key={sat}
                         onClick={() => setSatellite(sat)}
