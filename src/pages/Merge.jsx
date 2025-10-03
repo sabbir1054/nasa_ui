@@ -64,6 +64,24 @@ const Merge = () => {
         <div className="max-w-7xl mx-auto px-6 pt-40 pb-16">
           {/* Main Card Container */}
           <div className="bg-[#0a0f1a] border border-gray-800 rounded-lg p-6 md:p-8">
+            <div className="text-center mb-8">
+              <h2
+                className="text-3xl md:text-4xl font-extrabold tracking-wide animate-fade-in"
+                style={{
+                  background: "linear-gradient(90deg, #60A5FA 0%, #34D399 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  backgroundSize: "200% auto",
+                }}
+              >
+                Power up the model with unified data.
+              </h2>
+              <p className="text-gray-400 text-sm md:text-base mt-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+                Upload two CSVs, fuse them seamlessly, and unlock unified insights.
+              </p>
+            </div>
+
             <h2 className="text-xl font-semibold text-white mb-6 animate-fade-in">
               Merge TWO New CSVs
             </h2>

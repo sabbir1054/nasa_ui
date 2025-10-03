@@ -1,4 +1,5 @@
 import Navbar from './Navbar';
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -43,14 +44,22 @@ const Hero = () => {
 
           {/* Subtitle */}
           <p className="text-gray-400 text-center max-w-2xl mb-6 text-xs md:text-sm leading-relaxed px-4 font-light tracking-wide animate-fade-in" style={{ letterSpacing: '0.02em', animationDelay: '0.2s' }}>
-            SPECTRAWRR AI-SCIENCE HACKATHON IS ORGANIZED BY INSPIRING STARTUP
-            POWERED BY SCIENCE TESS LIGHTCURVE DATABASE, LEVERAGING MACHINE LEARNING
+            FROM FLICKERS OF STARLIGHT TO THE DISCOVERY OF NEW WORLDS, 
+            WE HARNESS THE POWER OF ARTIFICIAL INTELLIGENCE TO EXPLORE THE UNKNOWN. 
+            OUR MISSION TRANSFORMS RAW SPACE DATA INTO DISCOVERIES, 
+            BRINGING THE HUNT FOR EXOPLANETS TO SCIENTISTS, DREAMERS, AND CITIZEN EXPLORERS EVERYWHERE.
           </p>
 
-          {/* CTA Button */}
-          <button className="bg-blue-600 hover:bg-blue-700 hover:scale-105 text-white px-9 py-3.5 rounded-full text-sm font-bold uppercase tracking-widest transition-all duration-300 shadow-xl hover:shadow-blue-500/50 mb-10 md:mb-12 animate-pulse-slow group" style={{ letterSpacing: '0.1em' }}>
-            <span className="inline-block group-hover:animate-bounce">HUNT EXOPLANATE</span>
-          </button>
+          {/* CTA Button (Link) */}
+          <Link
+            to="/upload"
+            className="bg-blue-600 hover:bg-blue-700 hover:scale-105 text-white px-9 py-3.5 rounded-full text-sm font-bold uppercase tracking-widest transition-all duration-300 shadow-xl hover:shadow-blue-500/50 mb-10 md:mb-12 animate-pulse-slow inline-block"
+            style={{ letterSpacing: "0.1em" }}
+          >
+            <span className="inline-block group-hover:animate-bounce">
+              HUNT EXOPLANET
+            </span>
+          </Link>
 
           {/* Feature Cards Grid - 2x2 Layout */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl w-full px-4 pb-16">
@@ -117,7 +126,7 @@ const Hero = () => {
           </div>
         </div>
       </div>
-
+      <Navbar />
       {/* Custom Animations */}
       <style jsx>{`
         @keyframes fade-in-down {

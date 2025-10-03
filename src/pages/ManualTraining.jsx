@@ -138,6 +138,19 @@ const ManualTraining = () => {
 
           <div className="max-w-5xl mx-auto px-6 pt-40 pb-16">
             <div className="bg-[#0a0f1a] border border-gray-800 rounded-lg p-6 md:p-8 animate-slide-in-up">
+              <div className="text-center mb-1">
+                {/* <span className="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-[11px] md:text-xs tracking-wide text-blue-300">
+                  Star Hunt
+                </span> */}
+                <h1 className="mt-2 text-3xl md:text-4xl font-extrabold leading-tight">
+                  <span className="bg-gradient-to-r from-blue-400 via-purple-300 to-pink-300 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+                    Train Your Model
+                  </span>
+                </h1>
+                <p className="mt-2 text-sm md:text-base text-slate-300 max-w-2xl mx-auto">
+                  Select a satellite, choose your model, and upload the data.
+                </p>
+              </div>
               <h2 className="text-2xl font-semibold text-white mb-6 animate-fade-in">
                 Manual Training
               </h2>

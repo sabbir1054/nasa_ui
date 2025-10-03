@@ -276,14 +276,14 @@ const CsvViewer = ({ csvUrl, filename, onClose }) => {
                   KOI
                 </button>
                 <button
-                  onClick={() => setSatellite("TOI")}
+                  onClick={() => setSatellite("K2")}
                   className={`flex-1 py-2 text-xs rounded font-medium transition-all ${
                     satellite === "TOI"
                       ? "bg-blue-600 text-white"
                       : "bg-[#151b2a] border border-gray-700 text-white hover:bg-[#1a2132]"
                   }`}
                 >
-                  TOI
+                  K2
                 </button>
                 <button
                   onClick={() => setSatellite("TESS")}

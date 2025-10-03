@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+.bg-section2 {
+  background-image: url('/section2bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}

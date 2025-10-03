@@ -10,8 +10,24 @@ const UploadHeader = ({ satellite, setSatellite, model, setModel }) => {
 
   return (
     <div className="mb-6 animate-fade-in">
+      {/* Hero Header */}
+      <div className="text-center mb-1">
+        {/* <span className="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-[11px] md:text-xs tracking-wide text-blue-300">
+          Star Hunt
+        </span> */}
+        <h1 className="mt-2 text-3xl md:text-4xl font-extrabold leading-tight">
+          <span className="bg-gradient-to-r from-sky-300 via-indigo-200 to-emerald-200 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(56,189,248,0.3)]">
+            Hunting Worlds Beyond
+          </span>
+        </h1>
+        <p className="mt-2 text-sm md:text-base text-slate-300 max-w-2xl mx-auto">
+          Select a NASA dataset, choose your model, and uncover hidden exoplanets.
+        </p>
+      </div>
+
+      {/* Dataset Selection */}
       <h2 className="text-xl font-semibold text-white mb-4">
-        Select a NASA dataset
+        Select Mission
       </h2>
       <div className="flex gap-3 mb-6">
         <button
@@ -46,6 +62,7 @@ const UploadHeader = ({ satellite, setSatellite, model, setModel }) => {
         </button>
       </div>
 
+      {/* Model Selection */}
       <div className="mb-4">
         <h3 className="text-white text-base font-medium mb-3">Select Model</h3>
         <select
